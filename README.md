@@ -1,12 +1,5 @@
-<h1 align="center">Slim 4 Starter Template</h1>
+<h1 align="center">TX Tourists</h1>
 
-<p align="center">An opinionated starter template for a simple PHP application built on <a href="https://www.slimframework.com" target="_blank">Slim Framework 4</a> (and Tailwind CSS & Alpine.js).</p>
-
-<p align="center">
-  <a href="https://github.com/nbayramberdiyev/slim-4-starter/actions/workflows/continuous-integration.yml/badge.svg" target="_blank">
-    <img src="https://github.com/nbayramberdiyev/slim-4-starter/actions/workflows/continuous-integration.yml/badge.svg" alt="CI" />
-  </a>
-</p>
 
 <p align="center">
   <a href="#features">Features</a> •
@@ -16,29 +9,8 @@
 
 ## Features
 
-- :inbox_tray: Autoloader ([PSR-4](https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-4-autoloader.md))
-
-- :incoming_envelope: HTTP message interfaces with [Slim-Psr7](https://github.com/slimphp/Slim-Psr7) ([PSR-7](https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-7-http-message.md))
-
 - :dart: HTTP server request handlers and HTTP server middleware ([PSR-15](https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-15-request-handlers.md))
 
-- :electric_plug: HTTP factories ([PSR-17](https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-17-http-factory.md))
-
-- :gear: Environment variables support with [phpdotenv](https://github.com/vlucas/phpdotenv)
-
-- :ear_of_rice: Template engine with [Twig-View](https://github.com/slimphp/Twig-View)
-
-- :earth_asia: i18n support with Symfony's [Translation Component](https://github.com/symfony/translation)
-
-- :package: Dependency injection container with [PHP-DI](https://github.com/php-di/php-di) ([PSR-11](https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-11-container.md))
-
-- :test_tube: Unit testing with [PHPUnit](https://github.com/sebastianbergmann/phpunit)
-
-- :mag: Static code analysis with [PHPStan](https://github.com/phpstan/phpstan) and [Psalm](https://github.com/vimeo/psalm)
-
-- :telescope: Coding standards checking with [PHP-CS-Fixer](https://github.com/PHP-CS-Fixer/PHP-CS-Fixer) ([PSR-12](https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-12-extended-coding-style-guide.md))
-
-- :hammer_and_wrench: CI workflows with [GitHub Actions](https://docs.github.com/en/actions)
 
 ## Requirements
 
@@ -46,35 +18,50 @@
 - [Composer](https://getcomposer.org)
 
 ## Installation
+### Development Environment
 
-**1. Clone this repository into your local machine:**
+Install Docker
 
-```shell
-git clone git@github.com:nbayramberdiyev/slim-4-starter.git
-```
+Run `composer install` to intiate
 
-**2. Go to the project folder:**
+Copy `.env.example` to `.env` and update the configurations inside
 
-```shell
-cd slim-4-starter
-```
+Manually upload `/sql` folder file to create database
 
-**3. Install the project dependencies:**
+Run `composer run serve` to start server
 
-```shell
-composer install
-```
+Visit http://localhost:8080/ for API
 
-**4. Create a copy of `.env.example`:**
+### Production Environment
 
-```shell
-cp .env.example .env
-```
+Run `git clone git@github.com:ee01/tx-tourists.git` on server
 
-**5. Start the PHP development server:**
+Run `composer install` to intiate
 
-```shell
-php -S localhost:8888 -t public
-```
+Set http server to `public` folder
+
+Copy `.env.example` to `.env` and update the configurations inside
+
+run `sudo chmod -R 777 storage` to make sure permissions correct
+
+Manually upload `/sql` folder file to create database
+
+Add new webhook for deployment by Github push: https://github.com/ee01/webhook-eexx.me
+
+Setup the push event as webhook to https://eexx.me/webhooks/api.tourists.ieexx.com.php on [Github](https://github.com/ee01/tx-tourists)->Setting->Webhooks
+
+#### Multiple php versions server
+For multiple php versions server, you may entercount the cli php version is low to install.
+
+1. (done) Set sub-domain `api.xxx.com` to `public` folder, and set php version for this sub-domain to php 8.1 for web server.
+2. Set sub-domain `api-cli.xxx.com` to root folder, and set php version for this sub-domain to php 8.1 for cli like `composer install`.
+
+Deprecated:
+1. Upload the whole vender folder to server manually instead of `composer install`.
+2. Annotate the platform check in file `vendor/composer/platform_check.php` when running `composer xxxx`.
+
+## Deploy
+
+Run `git push` to deploy to eexx.me server automatically, as set the Github webhook.
 
 That's it! Now go build something cool.

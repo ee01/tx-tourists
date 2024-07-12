@@ -9,4 +9,7 @@ $container = require __DIR__ . '/container.php';
 
 AppFactory::setContainer($container);
 
-return AppFactory::create();
+$app = AppFactory::create();
+(require __DIR__ . '/eloquent.php')($app);
+
+return $app;

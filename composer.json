@@ -1,5 +1,5 @@
 {
-    "name": "nbayramberdiyev/slim-4-starter",
+    "name": "ee01/tx-tourists",
     "type": "project",
     "description": "An opinionated starter template for a simple PHP application built on Slim Framework 4.",
     "keywords": [
@@ -19,6 +19,7 @@
     "require": {
         "php": "^8.2",
         "ext-json": "*",
+        "illuminate/database": "^11.15",
         "php-di/php-di": "^7.0",
         "slim/psr7": "^1.7",
         "slim/slim": "^4.14",
@@ -68,7 +69,7 @@
         "lint:style": "./vendor/bin/php-cs-fixer fix --dry-run -vvv",
         "serve": [
             "Composer\\Config::disableProcessTimeout",
-            "@php -S localhost:0 -t public"
+            "@php -S localhost:8000 -t public"
         ],
         "test": "./vendor/bin/phpunit --testdox"
     },
