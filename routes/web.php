@@ -12,7 +12,7 @@ return static function (Slim\App $app): void {
     $app->get('/about', [AboutController::class, 'index'])->setName('about.index');
     $app->get('/contact', [ContactController::class, 'index'])->setName('contact.index');
     $app->get('/tourists', [TouristController::class, 'index']);
-    $app->get('/tourists/{id}', [TouristController::class, 'get']);
+    $app->get('/tourists/{id:[0-9]+}', [TouristController::class, 'get']);
     $app->post('/tourists', [ContactController::class, 'create']);
     $app->post('/tourists/bywps', [ContactController::class, 'create_by_wps']);
     $app->get('/tourists/bywps', [ContactController::class, 'verify_by_wps']);
