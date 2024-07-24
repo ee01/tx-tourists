@@ -37,11 +37,6 @@ final class TouristController extends Controller
         if (!$args) {
             return $this->json($response, ['bind_code' => '20240420223823449467314']);
         }
-        $response = $this->create($request, $response, $args);
-        return $this->json($response, ['bind_code' => '20240420223823449467314']);
-    }
-    public function verify_by_wps(Request $request, Response $response, $args): Response
-    {
-        return $this->json($response, ['bind_code' => '20240420223823449467314']);
+        return $this->create($request, $response, $args);
     }
 }

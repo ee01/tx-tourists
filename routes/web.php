@@ -15,5 +15,4 @@ return static function (Slim\App $app): void {
     $app->get('/tourists/{id:[0-9]+}', [TouristController::class, 'get']);
     $app->post('/tourists', [TouristController::class, 'create']);
     $app->post('/tourists/bywps', [TouristController::class, 'create_by_wps']);
-    $app->get('/tourists/bywps', [TouristController::class, 'verify_by_wps']);
 };
