@@ -41,17 +41,17 @@ final class TouristController extends Controller
         $stayDays = $answers->firstWhere('title', '预定在日本逗留天数')['value'] ?? 6;
         $data['end_date'] = date('Y-m-d', strtotime($data['start_date'] . ' + ' . $stayDays . ' days'));
         $data['idcard'] = $answers->firstWhere('title', '请上传身份证照片')['value'][5] ?? $answers->firstWhere('title', '身份证号')['value'][0] ?? '';
-        $data['sex'] = $data['idcard'] ? (substr($data['idcard'], 16, 1) % 2 ? '男' : '女') : '';
-        $data['birthday'] = $data['idcard'] ? substr($data['idcard'], 6, 4) . '-' . substr($data['idcard'], 10, 2) . '-' . substr($data['idcard'], 12, 2) : '';
+        $data['sex'] = $data['idcard'] ? (substr($data['idcard'], 16, 1) % 2 ? '男' : '女') : ($answers->firstWhere('title', '性别')['value'][0] ?? '');
+        $data['birthday'] = $data['idcard'] ? substr($data['idcard'], 6, 4) . '-' . substr($data['idcard'], 10, 2) . '-' . substr($data['idcard'], 12, 2) : ($answers->firstWhere('title', '出生日期')['value'] ?? '');
         $data['phone'] = $answers->firstWhere('title', '手机号')['value'] ?? '';
-        $data['passport'] = $answers->firstWhere('title', '请上传护照照片')['value'][2][0] ?? $answers->firstWhere('title', '护照号')['value'][0] ?? '';
+        $data['passport'] = $answers->firstWhere('title', '请上传护照照片')['value'][2] ?? $answers->firstWhere('title', '护照号')['value'][0] ?? '';
         $passportTypeEn = $answers->firstWhere('title', '请上传护照照片')['value'][1][0] ?? '';
         $passportType = $passportTypeEn == 'P' ? '普通' : ($passportTypeEn == 'W' ? ' 外交' : ($passportTypeEn == 'G' ? ' 公务' : '其他'));
         $data['passport_type'] = $passportTypeEn ? $passportType : ($answers->firstWhere('title', '护照号')['value'][0] ?? '');
-        $data['passport_province'] = $answers->firstWhere('title', '请上传护照照片')['value'][2][3] ?? $answers->firstWhere('title', '护照签发地')['value'][0] ?? '';
-        $data['passport_org'] = $answers->firstWhere('title', '请上传护照照片')['value'][2][4] ?? $answers->firstWhere('title', '护照签发机关')['value'][0] ?? '';
-        $data['passport_issue'] = $answers->firstWhere('title', '请上传护照照片')['value'][2][1] ?? $answers->firstWhere('title', '护照签发日期')['value'][0] ?? '';
-        $data['passport_expire'] = $answers->firstWhere('title', '请上传护照照片')['value'][2][2] ?? $answers->firstWhere('title', '护照有效期')['value'][0] ?? '';
+        $data['passport_province'] = $answers->firstWhere('title', '请上传护照照片')['value'][5] ?? $answers->firstWhere('title', '护照签发地')['value'][0] ?? '';
+        $data['passport_org'] = $answers->firstWhere('title', '请上传护照照片')['value'][6] ?? $answers->firstWhere('title', '护照签发机关')['value'][0] ?? '';
+        $data['passport_issue'] = $answers->firstWhere('title', '请上传护照照片')['value'][3] ?? $answers->firstWhere('title', '护照签发日期')['value'][0] ?? '';
+        $data['passport_expire'] = $answers->firstWhere('title', '请上传护照照片')['value'][4] ?? $answers->firstWhere('title', '护照有效期')['value'][0] ?? '';
         $data['raw'] = json_encode($raw);
 
         $tourist = Tourist::updateOrCreate([

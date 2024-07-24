@@ -32,8 +32,8 @@ CREATE TABLE `tourists` (
   `name` varchar(10) DEFAULT NULL,
   `first_name` varchar(5) DEFAULT NULL,
   `last_name` varchar(5) DEFAULT NULL,
-  `start_date` date NOT NULL DEFAULT current_timestamp(),
-  `end_date` date NOT NULL DEFAULT current_timestamp(),
+  `start_date` date DEFAULT,
+  `end_date` date DEFAULT,
   `idcard` varchar(18) DEFAULT NULL,
   `sex` varchar(2) DEFAULT NULL,
   `birthday` date DEFAULT NULL,
@@ -47,8 +47,8 @@ CREATE TABLE `tourists` (
   `raw` text DEFAULT NULL,
   `creatorName` varchar(255) DEFAULT NULL,
   `aid` varchar(50) NOT NULL,
-  `updated_at` datetime NOT NULL DEFAULT current_timestamp(),
-  `created_at` datetime NOT NULL DEFAULT current_timestamp()
+  `updated_at` datetime DEFAULT,
+  `created_at` datetime DEFAULT
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
