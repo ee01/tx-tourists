@@ -26,15 +26,17 @@ final class TouristController extends Controller
 
     public function create(Request $request, Response $response, $args): Response
     {
+        $params = $request->getQueryParams();
         $raw = $request->getParsedBody();
         $tourist = Tourist::create([
-            'raw' => $raw
+            'raw' => json_encode($raw)
         ]);
         return $this->json($response, ['id' => $tourist->id]);
     }
     public function create_by_wps(Request $request, Response $response, $args): Response
     {
-        if (!$args) {
+        $body = $request->getParsedBody();
+        if (!$body) {
             return $this->json($response, ['bind_code' => '20240420223823449467314']);
         }
         return $this->create($request, $response, $args);
