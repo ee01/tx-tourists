@@ -10,7 +10,7 @@ class Tourist extends Model
     protected $table = 'tourists';
 
     // 指定可以批量赋值的字段
-    protected $fillable = ['xing', 'ming', 'raw'];
+    protected $guarded = ['id'];
 
     // 如果你不想让Eloquent自动管理created_at和updated_at列，设置public $timestamps = false;
 
