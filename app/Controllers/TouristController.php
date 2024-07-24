@@ -34,6 +34,9 @@ final class TouristController extends Controller
     }
     public function create_by_wps(Request $request, Response $response, $args): Response
     {
+        if (!$args) {
+            return $this->json($response, ['bind_code' => '20240420223823449467314']);
+        }
         $response = $this->create($request, $response, $args);
         return $this->json($response, ['bind_code' => '20240420223823449467314']);
     }
