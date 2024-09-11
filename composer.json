@@ -20,6 +20,7 @@
         "php": "^8.2",
         "ext-json": "*",
         "illuminate/database": "^11.15",
+        "medz/cors": "^1.5",
         "php-di/php-di": "^7.0",
         "slim/psr7": "^1.7",
         "slim/slim": "^4.14",

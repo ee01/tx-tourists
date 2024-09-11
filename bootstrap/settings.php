@@ -24,4 +24,10 @@ return [
         'path'  => '../resources/views',
         'cache' => false,
     ],
+    'cors' => [
+        'allow-credentials' => true,
+        'allow-origin' => '*', // 允许所有域名
+        'allow-methods' => ['GET', 'POST', 'OPTIONS'], // 允许的请求方法
+        'allow-headers' => ['Content-Type', 'X-Requested-With'], // 允许的请求头
+    ],
 ];

@@ -28,9 +28,13 @@ Copy `.env.example` to `.env` and update the configurations inside
 
 Manually upload `/sql` folder file to create database
 
-Run `composer run serve` to start server
+Run `composer run serve` to start api server
 
-Visit http://localhost:8080/ for API
+(Visit http://localhost:8000/ for API)
+
+Run `cd views & npm run serve` to start application
+
+Visit http://localhost:8080/ for application
 
 ### Production Environment
 

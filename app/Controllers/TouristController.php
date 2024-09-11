@@ -13,8 +13,12 @@ final class TouristController extends Controller
 {
     public function index(Request $request, Response $response): Response
     {
-        // return $this->render($response, 'home/index.twig');
-        return $this->json($response, Tourist::find(1)->toArray());
+        $params = $request->getParsedBody();
+        $Builder = Tourist::query();
+        if (isset($params['name']) && $params['name']) {
+            $Builder->where('name', $params['name']);
+        }
+        return $this->json($response, $Builder->get()->toArray());
         return $response;
     }
 
