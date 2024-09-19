@@ -13,7 +13,7 @@ final class TouristController extends Controller
 {
     public function index(Request $request, Response $response): Response
     {
-        $params = $request->getParsedBody();
+        $params = $request->getQueryParams();
         $Builder = Tourist::query();
         if (isset($params['name']) && $params['name']) {
             $Builder->where('name', $params['name']);
