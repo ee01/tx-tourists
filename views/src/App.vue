@@ -1,9 +1,10 @@
 <script setup>
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
 import axios from 'axios';
 import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
 import md5 from 'md5';
+import dayjs from 'dayjs';
 
 const form = ref(null);
 const searchQuery = ref('');
@@ -12,6 +13,20 @@ const tourist = ref(null);
 const formError = ref(''); // 新增状态
 const passwordRules = [v => md5(v) == 'd964173dc44da83eeafa3aebbee9a1a0' || '密码错误'];
 import templateImage from './assets/form-to-apply-1.jpeg';
+
+const touristBirthday = computed(() => {
+  const birthday = tourist.value?.raw.answerContents.find(a => a.title == '请上传身份证照片')?.value[3] || '出生日期';
+  if (birthday && birthday !== '出生日期') {
+    return dayjs(birthday).format('DD/MM/YYYY');
+  }
+  return birthday;
+});
+const isFemale = computed(() => {
+  const is = tourist.value?.raw.answerContents.find(a => a.title == '请上传身份证照片')?.value[2][0] == '女';
+  return is;
+});
+const marry = computed(() => tourist.value?.raw.answerContents.find(a => a.title == '婚姻状况')?.value[0] || '已婚');
+const passportType = computed(() => tourist.value?.raw.answerContents.find(a => a.title == '请上传护照照片')?.value[1][0] || 'P');
 
 const searchTourist = async () => {
   const { valid } = await form.value.validate()
@@ -23,7 +38,7 @@ const searchTourist = async () => {
       return
     }
     formError.value = '';
-    tourist.value = response.data;
+    tourist.value = response.data[0];
   } catch (error) {
     console.error("Failed to search tourist:", error);
     tourist.value = null;
@@ -32,10 +47,17 @@ const searchTourist = async () => {
 
 const downloadAsPDF = async () => {
   const element = document.getElementById('tourist-template');
-  const canvas = await html2canvas(element);
+  const canvas = await html2canvas(element, { scale: 2 }); // 提高分辨率
   const imgData = canvas.toDataURL('image/png');
-  const pdf = new jsPDF();
-  pdf.addImage(imgData, 'PNG', 0, 0);
+  const pdf = new jsPDF({
+    orientation: 'portrait',
+    unit: 'mm',
+    format: 'a4'
+  });
+  const imgProps = pdf.getImageProperties(imgData);
+  const pdfWidth = pdf.internal.pageSize.getWidth();
+  const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+  pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
   pdf.save('tourist-info.pdf');
 };
 
@@ -94,10 +116,30 @@ const printTouristInfo = () => {
           </v-card-actions>
           <v-card-text>
             <div id="tourist-template">
-              <img :src="templateImage" alt="Template" width="600" />
+              <img :src="templateImage" alt="Template" width="800" />
               <div class="tourist-info">
-                <p>Name: {{ tourist.name }}</p>
-                <p>Position: {{ tourist.position }}</p>
+                <p style="left: 640px; top: 290px;">{{ tourist.first_name }}</p>
+                <p style="left: 640px; top: 315px;">{{ tourist.last_name }}</p>
+                <p style="left: 320px; top: 290px ;">{{ tourist.raw.answerContents.find(a => a.title == '英文姓氏')?.value }}</p>
+                <p style="left: 320px; top: 315px ;">{{ tourist.raw.answerContents.find(a => a.title == '英文名字')?.value }}</p>
+                <p style="left: 320px; top: 340px ;">{{ tourist.raw.answerContents.find(a => a.title == '曾用名')?.value || '无' }}</p>
+                <p style="left: 640px; top: 340px ;">{{ tourist.raw.answerContents.find(a => a.title == '英文曾用名')?.value || '无' }}</p>
+                <p style="left: 160px; top: 375px ;">{{ touristBirthday }}</p>
+                <p style="left: 360px; top: 375px ;">{{ tourist.raw.answerContents.find(a => a.title == '出生地点')?.value || '无' }}</p>
+                <p style="left: 160px; top: 404px ;">{{ !isFemale ? 'X' : '' }}</p>
+                <p style="left: 222px; top: 404px ;">{{ isFemale ? 'X' : '' }}</p>
+                <p style="left: 447px; top: 404px ;">{{ marry == '单身' ? 'X' : '' }}</p>
+                <p style="left: 529px; top: 404px ;">{{ marry == '已婚' ? 'X' : '' }}</p>
+                <p style="left: 610px; top: 404px ;">{{ marry == '离婚' ? 'X' : '' }}</p>
+                <p style="left: 692px; top: 404px ;">{{ marry == '丧偶' ? 'X' : '' }}</p>
+                <p style="left: 240px; top: 430px ;">{{ tourist.raw.answerContents.find(a => a.title == '国籍')?.value[0] || '无' }}</p>
+                <p style="left: 380px; top: 455px ;">{{ tourist.raw.answerContents.find(a => a.title == '曾有或另有国籍（如有）')?.value[0] || '无' }}</p>
+                <p style="left: 200px; top: 480px ;">{{ tourist.raw.answerContents.find(a => a.title == '请上传身份证照片')?.value[5] || '身份证' }}</p>
+                <p style="left: 202px; top: 511px ;">{{ passportType == 'W' ? 'X' : '' }}</p>
+                <p style="left: 275px; top: 511px ;">{{ passportType == 'G' ? 'X' : '' }}</p>
+                <p style="left: 348px; top: 511px ;">{{ passportType == 'P' ? 'X' : '' }}</p>
+                <p style="left: 419px; top: 511px ;">{{ passportType == 'O' ? 'X' : '' }}</p>
+                <p style="left: 550px; top: 511px ;">{{ tourist.raw.answerContents.find(a => a.title == '请上传护照照片')?.value[2] || '护照号' }}</p>
                 <!-- Add more tourist details as needed -->
               </div>
             </div>
@@ -111,7 +153,7 @@ const printTouristInfo = () => {
   </v-app>
 </template>
 
-<style scoped>
+<style scoped lang="less">
 .logo {
   height: 6em;
   padding: 1.5em;
@@ -123,6 +165,21 @@ const printTouristInfo = () => {
 }
 .logo.vue:hover {
   filter: drop-shadow(0 0 2em #42b883aa);
+}
+
+#tourist-template {
+  position: relative;
+
+  .tourist-info {
+    /* Add your styles here */
+    position: absolute;
+    top: 0;
+    left: 0;
+    p {
+      position: absolute;
+      width: 200px;
+    }
+  }
 }
 
 .watermark {

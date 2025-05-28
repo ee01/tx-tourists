@@ -11,6 +11,11 @@ class Tourist extends Model
 
     // 指定可以批量赋值的字段
     protected $guarded = ['id'];
+    // 定义字段类型
+    protected $casts = [
+        'birthday' => 'date',
+        'raw' => 'array',
+    ];
 
     // 如果你不想让Eloquent自动管理created_at和updated_at列，设置public $timestamps = false;
 
